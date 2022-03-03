@@ -8,4 +8,4 @@ GRAD-C24: Machine Learning S2022
 - Katalin Bayer
 
 ## Summary
-This repository provides materials for our project, predicting the power consumption, optmizing and comparing the performance of differecnt marchine learning algorithms. We analyze a data set of power consumption from Tetouan city, Morocco in 2017.
+This repository provides materials for our project, predicting the power consumption, optmizing and comparing the performance of differecnt marchine learning models. We will use data on weather conditions and variations of energy consumption in the city of Tetouan, Morrocco in 2017 to train and test our models.
