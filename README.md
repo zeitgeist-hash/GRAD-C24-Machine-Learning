@@ -1,4 +1,4 @@
-# GRAD-C24-Machine-Learning -- Predicting Power Consumption for Tetouan City
+# GRAD-C24-Machine-Learning: Predicting Power Consumption for Tetouan City
 GRAD-C24: Machine Learning S2022
 The Hertie School, Berlin
 
