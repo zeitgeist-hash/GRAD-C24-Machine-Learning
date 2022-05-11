@@ -1,5 +1,5 @@
 # GRAD-C24-Machine-Learning: Predicting Power Consumption for Tetouan City
-GRAD-C24: Machine Learning S2022, The Hertie School, Berlin
+Final project for GRAD-C24: Machine Learning S2022 course at the [Hertie School, Berlin](https://www.hertie-school.org/en/)
 
 # Contributors
 - Angela Duarte
