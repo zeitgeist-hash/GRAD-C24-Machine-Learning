@@ -1,7 +1,7 @@
 ---
 title: "Time Series Forecasting on Energy Consumption"
 description: |
-  In this article we provide some exciting results of our exploration of different supervised Machine Learning algorithms (ARIMA, Extra Trees, Gradient Boosting and Support Vector Machines) and an Auto Machine Learning Framework (AutoGluon) in predicting power consumption for the city of Tetouan, Morocco in 2017. The data set is a time series that also includes different markers of the weather conditions during that time, such as temperature, wind speed, and humidity. We build on work from an existing study, with a different approach in terms of data cleaning/transformation and models selected. We use a variety of models in an attempt to find which one best optimizes both accuracy and computational efficiency. 
+  In this article we provide some exciting results of our exploration of different supervised Machine Learning algorithms (ARIMA, Extra Trees, Gradient Boosting and Support Vector Machines) and an auto machine learning framework (AutoGluon) in predicting power consumption for the city of Tetouan, Morocco in 2017. The dataset is a time series that also includes different markers of the weather conditions during that time, such as temperature, wind speed, and humidity. We build on work from an existing study, with a different approach in terms of data cleaning/transformation and models selected. We use a variety of models in an attempt to find which one best optimizes both accuracy and computational efficiency. 
 author: 
   - name: Kabir Sandrolini
     url: https://github.com/ksandrolini
@@ -28,7 +28,6 @@ bibliography: bibliography.bib
 knitr::opts_chunk$set(echo = FALSE)
 # Load dependencies 
 library(reticulate) # For rendering Python code 
-
 ```
 
 ## Introduction
@@ -74,12 +73,12 @@ The results in *Table 1* confirm that the time series in Tetouan is indeed non-s
 :::
 To make our data stationary, we used differences between observations. The results of the differentiation can also be observed in the third column of *Table 1*: our new time series became stationary! We are ready now to fit and test our machine learning models.
 
-```{r fig10, echo = FALSE, message=FALSE, fig.cap="Stationary Time Series"}
+```{r fig2, echo = FALSE, message=FALSE, fig.cap="Stationary Time Series"}
 knitr::include_graphics("figures/StationaryTS.png")
 ```
 
 
-## Our Approach to Time Series Forecasting (Proposed Method and Experimental details)
+## Our Approach to Time Series Forecasting (Proposed method and experimental details)
 As mentioned before, we chose different models and approaches to the original study. The authors of that study predict energy consumption at both 10 minutes and 1 hour intervals, generating three different models per zone of the city. 
 
 Instead, we chose to better account for the time dependency of our data to get a clearer sense of ML's performance in time series forecasting problems. Since the data is not IID, we adjusted for its temporal nature by using an ARIMA model as a baseline and differencing the target variable to make the data stationary before fitting our models: ExtraTrees, SVM, Gradient Boosting, and AutoGluon. 
@@ -100,7 +99,7 @@ A key difference in the implementation between the ARIMA baseline model and the 
 
 The pm.utils.tsdisplay() function returns the following three visualisations. Figure \@ref(fig:fig2) below shows the desirable stationarity of our power consumption data after taking the first difference.The ACF plot indicates the strong seasonal component of the data series which informed the choice of including seasonal lags in our ARIMA model.
 
-```{r fig2,  echo = FALSE, out.width = '100%', fig.cap="Top: Plotting the Differenced Data. Bottom Left: ACF plot. Bottom Right: Histogram" }
+```{r fig3,  echo = FALSE, out.width = '100%', fig.cap="Top: Plotting the Differenced Data. Bottom Left: ACF plot. Bottom Right: Histogram" }
 knitr::include_graphics("figures/ACF_plot.png")
 
 ```
@@ -122,7 +121,7 @@ Our data set includes labels for Mean Power Consumption. We therefore used super
 #### ML Model's Experimental Details
 As usually happens on ML projects, we split the training set, validation set and test set in a ratio of 6:2:2. Since the data is based on time-series, this separation was chronological rather than random (if we did the usual train/test splitting, we would risk having future observations predicting past observations). Our validation and testing sets correspond then to the 40% of the newest observations so that the training is done in the earliest part of the time-series and the predictions on the subsequent observations.
 
-```{r fig3,  echo = FALSE, out.width = '100%', fig.cap="Set splitting into training, validation and testing sets." }
+```{r fig4,  echo = FALSE, out.width = '100%', fig.cap="Set splitting into training, validation and testing sets" }
 knitr::include_graphics("figures/split.png")
 ```
 
@@ -150,8 +149,11 @@ Table 3 shows the optimal parameters that we used for our testing set prediction
   tuning.
 :::
 
-### AutoML model-Autogluon
-Autogluon is an open-source framework that enables easy-to-use and easy-to-extend machine learning approaches developed by Amazon [@ge2020analysis]. It only needs a few lines of simple and elegant code to prototype multiple classical machine learning models, leveraging automatic hyperparameter tuning and stacking them in multiple layers for comparison. AutoGluon enables users to utilize state-of-the-art techniques without expert knowledge and conduct significant gains in accuracy and time-efficiency [@AutoGluon-Tabular2020].
+### Auto-ML framework - AutoGluon
+```{r fig5,  echo = FALSE, out.width = '100%', fig.cap="AutoGluon" }
+knitr::include_graphics("figures/AutoGluon.png")
+```
+AutoGluon is an open-source framework that enables easy-to-use and easy-to-extend machine learning approaches developed by Amazon [@ge2020analysis]. It only needs a few lines of simple and elegant code to prototype multiple classical machine learning models, leveraging automatic hyper parameter tuning and stacking them in multiple layers for comparison. AutoGluon enables users to utilize state-of-the-art techniques without expert knowledge and conduct significant gains in accuracy and time-efficiency [@AutoGluon-Tabular2020]. It is like a revolution, bringing great convenience to the use of machine learning on various tasks and model optimization.
 
 
 ## Evaluation methods
@@ -197,28 +199,29 @@ As soon as the auto_arima parameters are defined and the code is running, there 
 - 2. the "Mean" forecast, which lets auto_arima determine the number of optimal lags across various classes of ARMA models.
 - 3. the last forecast has been denoted the "Composite" forecast, first each Zone's individual power consumption is predicted using auto_arima, and then the total Mean Consumption is computed as the mean across the three zone's forecast. The visualisation of only the Mean forecast (only for the forecasted time period) is plotted below in \@ref(fig:fig4) below.
 
-```{r fig4,  echo = FALSE, out.width = '100%', fig.cap="Mean Consumption forecast only for the forecast horizon." }
+```{r fig6,  echo = FALSE, out.width = '100%', fig.cap="Mean Consumption forecast only for the forecast horizon" }
 knitr::include_graphics("figures/Mean_forecast.png")
 ```
     
 -   **SVR** Even with the optimal configurations resulting from the grid search algorithm, our SVR model underfits the power consumption stationary time series. The error rates that we obtained when testing the model are high (an error of almost $1750$, the RMSE, is considerable given that the differentiated means range between -5269 and 8193 KWh) - see Results table for more.
 Figure \@ref(fig:fig5) shows that the prediction values seem to pick up the oscillation trend of the time series, but not the extent of its variation along the 'y' axis.
 
-```{r fig5,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal SVR ." }
+```{r fig7,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal SVR " }
 knitr::include_graphics("figures/SVM_final.png")
 ```
 
 -   **ExtraTrees & GradientBoosting** The RMSE of both ExtraTrees & Gradient Boosting is around 340 after fine-tuning. They performed slightly worse on the testing set than on the validation set, as expected. It proves that both of them are very stable and suitable for dealing with time series forecasting problems.
 
-```{r fig6,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal ExtraTrees and Gradient Boosting."}
+```{r fig8,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal ExtraTrees and Gradient Boosting"}
 knitr::include_graphics("figures/ET_final.png")
 
 knitr::include_graphics("figures/GB_final.png")
 ```
 
--   **AutoGluon**  The Autogluon leader-board below shows per-model performance based on details such as MSE, training time, and so on The leader-board shows 12 ML models in total and ranks these models according to how well they perform.
+-   **AutoGluon**  The AutoGluon leader board below shows per-model performance based on details such as MSE (score_test), training time. The leader-board shows 12 machine learning models in total and ranks them according to how well they performed. The most exciting thing is that we don't need to fine-tuning these models by hand, the framework does that for us automatically with pretty good results.
+For evaluation metrics where higher values are worse (MSE), AutoGluon will flip their sign and print them as negative values during training (as it internally assumes higher values are better).
 
-```{r fig7,  echo = FALSE, out.width = '100%', fig.cap="Leaderboard of AutoGluon." }
+```{r fig9,  echo = FALSE, out.width = '100%', fig.cap="Leaderboard of AutoGluon" }
 knitr::include_graphics("figures/Auto.png")
 ```
 
@@ -227,7 +230,7 @@ knitr::include_graphics("figures/Auto.png")
 Generally speaking, all three results from the baseline ARIMA time series models capture the variance in the dependent variable rather well - in spite of adding no further explanatory variables and purely relying on the lags, seasonality, and moving averages. The regression analysis output in the Appendix show that all of the lag terms determined by auto_arima are statistically significant with p-values of 0. The intuition is sound too: the power consumption of today primarily depends on the power consumption an hour ago, two hours ago, and yesterday. The difference this 24-hour, seasonality lag makes is indicated by figure \@ref(fig:fig8) down below. The fact that the Naive forecast performed worst across the three models was hardly surprising; as we include additional, more relevant lags, the models' forecasting ability improves. The expectation was that the composite forecast would
 outperform the mean as the model would be able to adapt to each Zone individually first. However, despite this not being the case, all performance measures we computed are very close to each other in magnitude.
 
-```{r fig8, echo = FALSE, out.width = '100%', fig.cap="Search model without (m =1) vs. with (m=24) seasonality." }
+```{r fig10, echo = FALSE, out.width = '100%', fig.cap="Search model without (m =1) vs. with (m=24) seasonality" }
 knitr::include_graphics("figures/Seasonality_plot.png")
 ```
 
