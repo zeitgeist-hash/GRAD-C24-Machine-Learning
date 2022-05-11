@@ -205,15 +205,15 @@ knitr::include_graphics("figures/Mean_forecast.png")
 Figure \@ref(fig:fig5) shows that the prediction values seem to pick up the oscillation trend of the time series, but not the extent of its variation along the 'y' axis.
 
 ```{r fig5,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal SVR ." }
-knitr::include_graphics("figures/svr_test.png")
+knitr::include_graphics("figures/SVM_final.png")
 ```
 
 -   **ExtraTrees & GradientBoosting** The RMSE of both ExtraTrees & Gradient Boosting is around 340 after fine-tuning. They performed slightly worse on the testing set than on the validation set, as expected. It proves that both of them are very stable and suitable for dealing with time series forecasting problems.
 
 ```{r fig6,  echo = FALSE, out.width = '100%', fig.cap="Predicted vs actual values for optimal ExtraTrees and Gradient Boosting."}
-knitr::include_graphics("figures/ET.png")
+knitr::include_graphics("figures/ET_final.png")
 
-knitr::include_graphics("figures/GB.png")
+knitr::include_graphics("figures/GB_final.png")
 ```
 
 -   **AutoGluon**  The Autogluon leader-board below shows per-model performance based on details such as MSE, training time, and so on The leader-board shows 12 ML models in total and ranks these models according to how well they perform.
